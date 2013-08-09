@@ -46,7 +46,9 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
     self = [super init];
     if (self) {
         // Create associated NSButton to place inside the bar (it's customized by DMTabBarButtonCell with a special gradient for selected state)
-        tabBarItemButton = [[NSButton alloc] initWithFrame:NSZeroRect];
+        tabBarItemButton = [[NSButton alloc] initWithFrame:NSMakeRect(0, 0, 32.0f, 24.0f)];
+        [tabBarItemButton setImagePosition:NSImageOnly];
+        [tabBarItemButton setBordered:NO];
         tabBarItemButton.cell = [[DMTabBarButtonCell alloc] init];
         tabBarItemButton.image = iconImage;
         [tabBarItemButton setEnabled:YES];
@@ -155,7 +157,7 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
 - (id)init {
     self = [super init];
     if (self) {
-        self.bezelStyle = NSTexturedRoundedBezelStyle;
+//        self.bezelStyle = NSTexturedRoundedBezelStyle;
     }
     return self;
 }
