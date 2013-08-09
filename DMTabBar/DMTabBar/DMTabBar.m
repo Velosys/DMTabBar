@@ -62,9 +62,10 @@
 
 - (void)setDefaultColors
 {
-    self.gradientColorStart = kDMTabBarGradientColor_Start;
-    self.gradientColorEnd = kDMTabBarGradientColor_End;
-    self.borderColor = kDMTabBarBorderColor;
+    NSColor* darkDarkGray = [NSColor colorWithSRGBRed:68.0f/255.0f green:68.0f/255.0f blue:68.0f/255.0f alpha:1];
+    self.gradientColorStart = darkDarkGray;
+    self.gradientColorEnd = darkDarkGray;
+    self.borderColor = nil;
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
