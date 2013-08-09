@@ -35,6 +35,8 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
 @synthesize tag;
 @synthesize tabBarItemButton;
 @synthesize state;
+@synthesize alternateIcon;
+@synthesize originalIcon;
 
 + (DMTabBarItem *) tabBarItemWithIcon:(NSImage *) iconImage tag:(NSUInteger) itemTag {
     return [[DMTabBarItem alloc] initWithIcon:iconImage tag:itemTag];
