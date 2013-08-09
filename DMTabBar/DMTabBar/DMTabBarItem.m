@@ -70,6 +70,15 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
     return tabBarItemButton.image;  
 }
 
+- (void) setAlternateIcon:(NSImage *)newAlternateIcon {
+    tabBarItemButton.alternateImage = newAlternateIcon;
+}
+
+- (NSImage *) alternateIcon
+{
+    return  tabBarItemButton.alternateImage;
+}
+
 - (void) setTag:(NSUInteger)newTag {  
     tabBarItemButton.tag = newTag; 
 }
@@ -103,7 +112,31 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
 }
 
 - (void) setState:(NSInteger)value {
-    tabBarItemButton.state = value;
+    if (tabBarItemButton.state != value)
+    {
+        tabBarItemButton.state = value;
+
+        switch (value)
+        {
+            case NSOnState:
+            {
+                self.originalIcon = [self icon];
+                [self setIcon:[self alternateIcon]];
+                [self setAlternateIcon:self.originalIcon];
+                break;
+            }
+
+            case NSOffState:
+            {
+                if (self.originalIcon)
+                {
+                    [self setAlternateIcon:[self icon]];
+                    [self setIcon:self.originalIcon];
+                    self.originalIcon = nil;
+                }
+            }
+        }
+    }
 }
 
 - (NSInteger) state {
