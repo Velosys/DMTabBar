@@ -33,9 +33,11 @@
         NSImage *iconImage = [objDict objectForKey:@"image"];
         [iconImage setTemplate:YES];
         
-        DMTabBarItem *item1 = [DMTabBarItem tabBarItemWithIcon:iconImage tag:idx];
+//        DMTabBarItem *item1 = [DMTabBarItem tabBarItemWithIcon:iconImage tag:idx];
+        DMTabBarItem *item1 = [DMTabBarItem tabBarItemWithTitle:objDict[@"title"] tag:idx];
+
 //        item1.toolTip = [objDict objectForKey:@"title"];
-        item1.keyEquivalent = [NSString stringWithFormat:@"%d",idx];
+        item1.keyEquivalent = [NSString stringWithFormat:@"%ld",(unsigned long)idx];
         item1.keyEquivalentModifierMask = NSCommandKeyMask;
         [items addObject:item1];
     }];

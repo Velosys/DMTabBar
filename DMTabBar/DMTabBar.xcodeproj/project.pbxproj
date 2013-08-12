@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		15970ADF17B9565600C7A3CA /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15970ADE17B9565600C7A3CA /* CoreText.framework */; };
+		15970AE017B959E800C7A3CA /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9C42DB2158F85B700919C4A /* AppKit.framework */; };
 		D9C42DB0158F85B700919C4A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9C42DAF158F85B700919C4A /* Cocoa.framework */; };
 		D9C42DBA158F85B700919C4A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D9C42DB8158F85B700919C4A /* InfoPlist.strings */; };
 		D9C42DBC158F85B700919C4A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D9C42DBB158F85B700919C4A /* main.m */; };
@@ -21,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		15970ADE17B9565600C7A3CA /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		D9C42DAB158F85B700919C4A /* DMTabBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DMTabBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9C42DAF158F85B700919C4A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D9C42DB2158F85B700919C4A /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -48,6 +51,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15970AE017B959E800C7A3CA /* AppKit.framework in Frameworks */,
+				15970ADF17B9565600C7A3CA /* CoreText.framework in Frameworks */,
 				D9C42DB0158F85B700919C4A /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -58,6 +63,7 @@
 		D9C42DA0158F85B700919C4A = {
 			isa = PBXGroup;
 			children = (
+				15970ADE17B9565600C7A3CA /* CoreText.framework */,
 				D9C42DB5158F85B700919C4A /* DMTabBar */,
 				D9C42DAE158F85B700919C4A /* Frameworks */,
 				D9C42DAC158F85B700919C4A /* Products */,
@@ -337,6 +343,7 @@
 				D9C42DCB158F85B700919C4A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

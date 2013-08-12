@@ -28,6 +28,8 @@
 
 // Init methods
 + (DMTabBarItem *) tabBarItemWithIcon:(NSImage *) iconImage tag:(NSUInteger) itemTag;
++ (DMTabBarItem *) tabBarItemWithTitle:(NSString *) title tag:(NSUInteger) itemTag;
 - (id)initWithIcon:(NSImage *) iconImage tag:(NSUInteger) itemTag;
+- (id)initWithTitle:(NSString *) title tag:(NSUInteger) itemTag;
 
 @end
