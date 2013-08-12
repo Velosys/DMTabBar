@@ -22,6 +22,7 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
                                                                                                          kDMTabBarItemGradientColor1, nil] \
                                                                                    atLocations: kDMTabBarItemGradientColor_Locations \
                                                                                     colorSpace: [NSColorSpace genericGrayColorSpace]]
+#define kDMTabBarItemTextPadding                            20.0f
 
 @interface DMTabBarButtonCell : NSButtonCell { }
 @end
@@ -78,8 +79,12 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
         NSFont* font = [[NSFontManager sharedFontManager] fontWithFamily:@"Lucida Grande" traits:NSUnboldFontMask weight:8 size:13.0f];
         NSColor* color = [NSColor greenColor];
         NSColor* altColor = [NSColor grayColor];
-        NSDictionary* attributes = @{ NSFontAttributeName: font, NSForegroundColorAttributeName: color};
-        NSDictionary* altAttributes = @{ NSFontAttributeName: font, NSForegroundColorAttributeName: altColor };
+        NSMutableParagraphStyle* centeredStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        [centeredStyle setAlignment:NSCenterTextAlignment];
+
+
+        NSDictionary* attributes = @{ NSFontAttributeName: font, NSForegroundColorAttributeName: color, NSParagraphStyleAttributeName: centeredStyle };
+        NSDictionary* altAttributes = @{ NSFontAttributeName: font, NSForegroundColorAttributeName: altColor, NSParagraphStyleAttributeName: centeredStyle };
         NSAttributedString* attrString = [[NSAttributedString alloc] initWithString:title attributes:attributes];
         NSAttributedString* altAttrString = [[NSAttributedString alloc] initWithString:title attributes:altAttributes];
         _attrTitle = [[NSMutableAttributedString alloc] initWithString:[title copy]];
@@ -90,7 +95,7 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
 //        CGSize fitSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [_attrTitle length]), NULL, targetSize, NULL);
 //        CFRelease(framesetter);
         NSSize fitSize = [title sizeWithAttributes:@{ NSFontAttributeName: font}];
-        tabBarItemButton = [[NSButton alloc] initWithFrame:NSMakeRect(0, 0, fitSize.width, fitSize.height)];
+        tabBarItemButton = [[NSButton alloc] initWithFrame:NSMakeRect(0, 0, fitSize.width + kDMTabBarItemTextPadding, fitSize.height)];
         tabBarItemButton.cell = [[DMTabBarButtonCell alloc] init];
         
         [tabBarItemButton setImagePosition:NSNoImage];
@@ -100,6 +105,7 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
         [tabBarItemButton setTag:itemTag];
         [tabBarItemButton sendActionOn:NSLeftMouseDownMask];
         [tabBarItemButton setBordered:NO];
+        [tabBarItemButton setAlignment:NSCenterTextAlignment];
         [self setItemType:DMTabBarItemTitleOnly];
     }
     return self;
@@ -110,6 +116,7 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
 {
     NSFont* font = [[NSFontManager sharedFontManager] fontWithFamily:@"Lucida Grande" traits:NSUnboldFontMask weight:8 size:13.0f];
     NSSize fitSize = [tabBarItemButton.title sizeWithAttributes:@{ NSFontAttributeName: font}];
+    fitSize.width += kDMTabBarItemTextPadding;
     return fitSize;
 }
 
