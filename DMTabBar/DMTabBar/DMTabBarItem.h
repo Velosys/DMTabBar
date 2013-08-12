@@ -9,6 +9,12 @@
 
 #import <Foundation/Foundation.h>
 
+
+typedef enum {
+    DMTabBarItemTitleOnly,
+    DMTabBarItemIconOnly
+} DMTabBarItemType;
+
 @interface DMTabBarItem : NSButtonCell { }
 
 @property (nonatomic,assign)    BOOL        enabled;                        // YES or NO to enable or disable the item
@@ -20,7 +26,7 @@
 @property (nonatomic,assign)    NSUInteger  keyEquivalentModifierMask;      // Shortcut modifier key (keyEquivalentModifierMask+keyEquivalent = event)
 @property (nonatomic,assign)    NSUInteger  tag;                            // Tag of the item
 @property (nonatomic,assign)    NSInteger   state;                          // Current state (NSOnState = selected)
-
+@property (nonatomic,assign)    DMTabBarItemType itemType;
 // Internal use
 // We'll use a customized NSButton (+NSButtonCell) and apply it inside the bar for each item.
 // You should never access to this element, but only with the DMTabBarItem istance itself.
@@ -31,5 +37,8 @@
 + (DMTabBarItem *) tabBarItemWithTitle:(NSString *) title tag:(NSUInteger) itemTag;
 - (id)initWithIcon:(NSImage *) iconImage tag:(NSUInteger) itemTag;
 - (id)initWithTitle:(NSString *) title tag:(NSUInteger) itemTag;
+
+// Size of the title required to render.
+- (NSSize)titleSize;
 
 @end

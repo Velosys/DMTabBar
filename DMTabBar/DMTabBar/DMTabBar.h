@@ -10,6 +10,7 @@
 #import <Cocoa/Cocoa.h>
 #import "DMTabBarItem.h"
 
+
 enum {
     DMTabBarItemSelectionType_WillSelect    = 0,        // Selection of the item will happend
     DMTabBarItemSelectionType_DidSelect     = 1         // Selection is changed

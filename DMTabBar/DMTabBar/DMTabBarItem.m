@@ -11,6 +11,7 @@
 #import <CoreText/CoreText.h>
 #import <AppKit/NSStringDrawing.h>
 
+
 static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
 
 #define kDMTabBarItemGradientColor1                         [NSColor colorWithCalibratedWhite:0.7f alpha:0.0f]
@@ -64,6 +65,8 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
         tabBarItemButton.tag = itemTag;
         [tabBarItemButton sendActionOn:NSLeftMouseDownMask];
         [tabBarItemButton setBordered:NO];
+
+        [self setItemType:DMTabBarItemIconOnly];
     }
     return self;
 }
@@ -93,12 +96,21 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
         [tabBarItemButton setImagePosition:NSNoImage];
         [tabBarItemButton setButtonType:NSMomentaryChangeButton];
         [tabBarItemButton setAttributedTitle:attrString];
-        [tabBarItemButton setAlternateTitle:altAttrString];
+        [tabBarItemButton setAttributedAlternateTitle:altAttrString];
         [tabBarItemButton setTag:itemTag];
         [tabBarItemButton sendActionOn:NSLeftMouseDownMask];
         [tabBarItemButton setBordered:NO];
+        [self setItemType:DMTabBarItemTitleOnly];
     }
     return self;
+}
+
+// the size needed to display the title
+- (NSSize)titleSize
+{
+    NSFont* font = [[NSFontManager sharedFontManager] fontWithFamily:@"Lucida Grande" traits:NSUnboldFontMask weight:8 size:13.0f];
+    NSSize fitSize = [tabBarItemButton.title sizeWithAttributes:@{ NSFontAttributeName: font}];
+    return fitSize;
 }
 
 - (NSString *)description {
@@ -212,44 +224,44 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
     return self.state;
 }
 
-- (void) drawBezelWithFrame:(NSRect)frame inView:(NSView *)controlView {
-    if (self.state == NSOnState) { 
-        // If selected we need to draw the border new background for selection (otherwise we will use default back color)
-        // Save current context
-        [[NSGraphicsContext currentContext] saveGraphicsState];
-        
-        // Draw light vertical gradient
-        [kDMTabBarItemGradient drawInRect:frame angle:-90.0f];
-        
-        // Draw shadow on the left border of the item
-        NSShadow *shadow = [[NSShadow alloc] init];
-        shadow.shadowOffset = NSMakeSize(1.0f, 0.0f);
-        shadow.shadowBlurRadius = 2.0f;
-        shadow.shadowColor = [NSColor darkGrayColor];
-        [shadow set];
-        
-        [[NSColor blackColor] set];        
-        CGFloat radius = 50.0;
-        NSPoint center = NSMakePoint(NSMinX(frame) - radius, NSMidY(frame));
-        NSBezierPath *path = [NSBezierPath bezierPath];
-        [path moveToPoint:center];
-        [path appendBezierPathWithArcWithCenter:center radius:radius startAngle:-90.0f endAngle:90.0f];
-        [path closePath];
-        [path fill];
-        
-        // shadow of the right border
-        shadow.shadowOffset = NSMakeSize(-1.0f, 0.0f);
-        [shadow set];
-        
-        center = NSMakePoint(NSMaxX(frame) + radius, NSMidY(frame));
-        path = [NSBezierPath bezierPath];
-        [path moveToPoint:center];
-        [path appendBezierPathWithArcWithCenter:center radius:radius startAngle:90.0f  endAngle:270.0f];
-        [path closePath];
-        [path fill];
-        
-        // Restore context
-        [[NSGraphicsContext currentContext] restoreGraphicsState];
-    }
-}
+//- (void) drawBezelWithFrame:(NSRect)frame inView:(NSView *)controlView {
+//    if (self.state == NSOnState) { 
+//        // If selected we need to draw the border new background for selection (otherwise we will use default back color)
+//        // Save current context
+//        [[NSGraphicsContext currentContext] saveGraphicsState];
+//        
+//        // Draw light vertical gradient
+//        [kDMTabBarItemGradient drawInRect:frame angle:-90.0f];
+//        
+//        // Draw shadow on the left border of the item
+//        NSShadow *shadow = [[NSShadow alloc] init];
+//        shadow.shadowOffset = NSMakeSize(1.0f, 0.0f);
+//        shadow.shadowBlurRadius = 2.0f;
+//        shadow.shadowColor = [NSColor darkGrayColor];
+//        [shadow set];
+//        
+//        [[NSColor blackColor] set];        
+//        CGFloat radius = 50.0;
+//        NSPoint center = NSMakePoint(NSMinX(frame) - radius, NSMidY(frame));
+//        NSBezierPath *path = [NSBezierPath bezierPath];
+//        [path moveToPoint:center];
+//        [path appendBezierPathWithArcWithCenter:center radius:radius startAngle:-90.0f endAngle:90.0f];
+//        [path closePath];
+//        [path fill];
+//        
+//        // shadow of the right border
+//        shadow.shadowOffset = NSMakeSize(-1.0f, 0.0f);
+//        [shadow set];
+//        
+//        center = NSMakePoint(NSMaxX(frame) + radius, NSMidY(frame));
+//        path = [NSBezierPath bezierPath];
+//        [path moveToPoint:center];
+//        [path appendBezierPathWithArcWithCenter:center radius:radius startAngle:90.0f  endAngle:270.0f];
+//        [path closePath];
+//        [path fill];
+//        
+//        // Restore context
+//        [[NSGraphicsContext currentContext] restoreGraphicsState];
+//    }
+//}
 @end
