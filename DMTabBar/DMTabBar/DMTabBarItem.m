@@ -60,23 +60,29 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
 
 - (void)setButtonTextColor:(NSColor *)buttonTextColor
 {
-    _buttonTextColor = buttonTextColor;
+    if (self.itemType == DMTabBarItemTitleOnly)
+    {
+        _buttonTextColor = buttonTextColor;
 
-    // set attributes on title
+        // set attributes on title
 
-    NSMutableAttributedString* attributedTitle = [[[tabBarItemButton cell] attributedTitle] mutableCopy];
-    [self setValue:self.buttonTextColor forAttribute:NSForegroundColorAttributeName forAttributedString:attributedTitle];
-    [[tabBarItemButton cell] setAttributedTitle:attributedTitle];
+        NSMutableAttributedString* attributedTitle = [[[tabBarItemButton cell] attributedTitle] mutableCopy];
+        [self setValue:self.buttonTextColor forAttribute:NSForegroundColorAttributeName forAttributedString:attributedTitle];
+        [[tabBarItemButton cell] setAttributedTitle:attributedTitle];
+    }
 
 }
 
 - (void)setAlternateButtonTextColor:(NSColor *)alternateButtonTextColor
 {
-    _alternateButtonTextColor = alternateButtonTextColor;
+    if (self.itemType == DMTabBarItemTitleOnly)
+    {
+        _alternateButtonTextColor = alternateButtonTextColor;
 
-    NSMutableAttributedString* attributedAlternateTitle = [[[tabBarItemButton cell] attributedAlternateTitle] mutableCopy];
-    [self setValue:self.alternateButtonTextColor forAttribute:NSForegroundColorAttributeName forAttributedString:attributedAlternateTitle];
-    [[tabBarItemButton cell] setAttributedAlternateTitle:attributedAlternateTitle];
+        NSMutableAttributedString* attributedAlternateTitle = [[[tabBarItemButton cell] attributedAlternateTitle] mutableCopy];
+        [self setValue:self.alternateButtonTextColor forAttribute:NSForegroundColorAttributeName forAttributedString:attributedAlternateTitle];
+        [[tabBarItemButton cell] setAttributedAlternateTitle:attributedAlternateTitle];
+    }
 }
 
 + (DMTabBarItem *) tabBarItemWithIcon:(NSImage *) iconImage tag:(NSUInteger) itemTag {
