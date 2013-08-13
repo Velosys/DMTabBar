@@ -20,6 +20,10 @@ typedef enum {
 @property (nonatomic,assign)    BOOL        enabled;                        // YES or NO to enable or disable the item
 @property (nonatomic,strong)    NSImage*    icon;                           // That's the image of the item
 @property (nonatomic,strong)    NSImage*    alternateIcon;                  // Selected icon image
+@property (nonatomic,strong)    NSColor*    buttonBackgroundColor;          // background color behind icon and text
+@property (nonatomic,strong)    NSColor*    alternateButtonBackgroundColor; // alternate bg color for selection
+@property (nonatomic,strong)    NSColor*    buttonTextColor;                // foreground text color
+@property (nonatomic,strong)    NSColor*    alternateButtonTextColor;       // alternate fg color for selection
 @property (nonatomic,strong)    NSImage*    originalIcon;                   // Pointer to swap from the icon to the alternate icon
 @property (nonatomic,strong)    NSString*   toolTip;                        // Tool tip message
 @property (nonatomic,strong)    NSString*   keyEquivalent;                  // Shortcut key equivalent

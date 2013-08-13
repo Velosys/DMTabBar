@@ -44,6 +44,41 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
 @synthesize alternateIcon;
 @synthesize originalIcon;
 
+#pragma mark - Overridden Properties
+
+- (void)setButtonBackgroundColor:(NSColor *)buttonBackgroundColor
+{
+    _buttonBackgroundColor = buttonBackgroundColor;
+
+    [[tabBarItemButton cell] setBackgroundColor:_buttonBackgroundColor];
+}
+
+- (void)setAlternateButtonBackgroundColor:(NSColor *)alternateButtonBackgroundColor
+{
+    _alternateButtonBackgroundColor = alternateButtonBackgroundColor;
+}
+
+- (void)setButtonTextColor:(NSColor *)buttonTextColor
+{
+    _buttonTextColor = buttonTextColor;
+
+    // set attributes on title
+
+    NSMutableAttributedString* attributedTitle = [[[tabBarItemButton cell] attributedTitle] mutableCopy];
+    [self setValue:self.buttonTextColor forAttribute:NSForegroundColorAttributeName forAttributedString:attributedTitle];
+    [[tabBarItemButton cell] setAttributedTitle:attributedTitle];
+
+}
+
+- (void)setAlternateButtonTextColor:(NSColor *)alternateButtonTextColor
+{
+    _alternateButtonTextColor = alternateButtonTextColor;
+
+    NSMutableAttributedString* attributedAlternateTitle = [[[tabBarItemButton cell] attributedAlternateTitle] mutableCopy];
+    [self setValue:self.alternateButtonTextColor forAttribute:NSForegroundColorAttributeName forAttributedString:attributedAlternateTitle];
+    [[tabBarItemButton cell] setAttributedAlternateTitle:attributedAlternateTitle];
+}
+
 + (DMTabBarItem *) tabBarItemWithIcon:(NSImage *) iconImage tag:(NSUInteger) itemTag {
     return [[DMTabBarItem alloc] initWithIcon:iconImage tag:itemTag];
 }
@@ -60,12 +95,13 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
         tabBarItemButton = [[NSButton alloc] initWithFrame:NSMakeRect(0, 0, iconImage.size.width, iconImage.size.height)];
         tabBarItemButton.cell = [[DMTabBarButtonCell alloc] init];
         [tabBarItemButton setImagePosition:NSImageOnly];
-        [tabBarItemButton setButtonType:NSMomentaryChangeButton];
         tabBarItemButton.image = iconImage;
         [tabBarItemButton setEnabled:YES];
         tabBarItemButton.tag = itemTag;
         [tabBarItemButton sendActionOn:NSLeftMouseDownMask];
         [tabBarItemButton setBordered:NO];
+        [tabBarItemButton setButtonType:NSToggleButton];
+
 
         [self setItemType:DMTabBarItemIconOnly];
     }
@@ -77,35 +113,29 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
     self = [super init];
     if (self) {
         NSFont* font = [[NSFontManager sharedFontManager] fontWithFamily:@"Lucida Grande" traits:NSUnboldFontMask weight:8 size:13.0f];
-        NSColor* color = [NSColor greenColor];
-        NSColor* altColor = [NSColor grayColor];
         NSMutableParagraphStyle* centeredStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         [centeredStyle setAlignment:NSCenterTextAlignment];
 
-
-        NSDictionary* attributes = @{ NSFontAttributeName: font, NSForegroundColorAttributeName: color, NSParagraphStyleAttributeName: centeredStyle };
-        NSDictionary* altAttributes = @{ NSFontAttributeName: font, NSForegroundColorAttributeName: altColor, NSParagraphStyleAttributeName: centeredStyle };
+        NSDictionary* attributes = @{ NSFontAttributeName: font, NSParagraphStyleAttributeName: centeredStyle };
+        NSDictionary* altAttributes = @{ NSFontAttributeName: font, NSParagraphStyleAttributeName: centeredStyle };
         NSAttributedString* attrString = [[NSAttributedString alloc] initWithString:title attributes:attributes];
         NSAttributedString* altAttrString = [[NSAttributedString alloc] initWithString:title attributes:altAttributes];
         _attrTitle = [[NSMutableAttributedString alloc] initWithString:[title copy]];
         [_attrTitle setAttributes:@{ NSFontAttributeName : font.fontName} range:NSMakeRange(0, _attrTitle.length)];
         
-//        CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge_retained CFAttributedStringRef) _attrTitle);
-        CGSize targetSize = CGSizeMake(320, CGFLOAT_MAX);
-//        CGSize fitSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [_attrTitle length]), NULL, targetSize, NULL);
-//        CFRelease(framesetter);
         NSSize fitSize = [title sizeWithAttributes:@{ NSFontAttributeName: font}];
         tabBarItemButton = [[NSButton alloc] initWithFrame:NSMakeRect(0, 0, fitSize.width + kDMTabBarItemTextPadding, fitSize.height)];
         tabBarItemButton.cell = [[DMTabBarButtonCell alloc] init];
         
         [tabBarItemButton setImagePosition:NSNoImage];
-        [tabBarItemButton setButtonType:NSMomentaryChangeButton];
         [tabBarItemButton setAttributedTitle:attrString];
         [tabBarItemButton setAttributedAlternateTitle:altAttrString];
         [tabBarItemButton setTag:itemTag];
         [tabBarItemButton sendActionOn:NSLeftMouseDownMask];
         [tabBarItemButton setBordered:NO];
         [tabBarItemButton setAlignment:NSCenterTextAlignment];
+        [tabBarItemButton setButtonType:NSToggleButton];
+
         [self setItemType:DMTabBarItemTitleOnly];
     }
     return self;
@@ -186,9 +216,12 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
         {
             case NSOnState:
             {
+                // Icon, if any
                 self.originalIcon = [self icon];
                 [self setIcon:[self alternateIcon]];
                 [self setAlternateIcon:self.originalIcon];
+                
+                [[tabBarItemButton cell] setBackgroundColor:self.alternateButtonBackgroundColor];
                 break;
             }
 
@@ -200,6 +233,9 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
                     [self setIcon:self.originalIcon];
                     self.originalIcon = nil;
                 }
+                
+                [[tabBarItemButton cell] setBackgroundColor:self.buttonBackgroundColor];
+                break;
             }
         }
     }
@@ -207,6 +243,20 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
 
 - (NSInteger) state {
     return tabBarItemButton.state;
+}
+
+#pragma mark - private
+                                                                
+- (NSMutableAttributedString*)setValue:(id)value forAttribute:(NSString*)attribute forAttributedString:(NSMutableAttributedString*)attributedString
+{
+    if (!attributedString || !value || !attribute)
+        return attributedString;
+
+    NSRange range;
+    NSMutableDictionary* attributes = [[attributedString attributesAtIndex:0 effectiveRange:&range] mutableCopy];
+    [attributes setValue:value forKey:attribute];
+    [attributedString setAttributes:attributes range:NSMakeRange(0, [attributedString length])];
+    return attributedString;
 }
 
 @end
@@ -221,8 +271,8 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
     if (self) {
         self.bezelStyle = NSTexturedRoundedBezelStyle;
         [self setHighlightsBy:NSContentsCellMask];
-        [self setShowsStateBy:NSPushInCell];
-        [self setBackgroundColor:[NSColor clearColor]];
+        [self setShowsStateBy:NSContentsCellMask];
+//        [self setBackgroundColor:[NSColor clearColor]];
     }
     return self;
 }

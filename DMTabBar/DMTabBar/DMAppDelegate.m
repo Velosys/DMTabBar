@@ -27,6 +27,11 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     NSMutableArray *items = [[NSMutableArray alloc] initWithCapacity:2];
+
+    NSColor* whiteColor = [NSColor whiteColor];
+    NSColor* blackColor = [NSColor blackColor];
+    NSColor* greenColor = [NSColor greenColor];
+    NSColor* grayColor  = [NSColor grayColor];
     
     // Create an array of DMTabBarItem objects
     [kTabBarElements enumerateObjectsUsingBlock:^(NSDictionary* objDict, NSUInteger idx, BOOL *stop) {
@@ -36,6 +41,11 @@
 //        DMTabBarItem *item1 = [DMTabBarItem tabBarItemWithIcon:iconImage tag:idx];
 //        DMTabBarItem *item1 = [DMTabBarItem tabBarItemWithIcon:iconImage tag:idx];
         DMTabBarItem* item1 = [DMTabBarItem tabBarItemWithTitle:objDict[@"title"] tag:idx];
+        item1.buttonTextColor                   = whiteColor;
+        item1.alternateButtonTextColor          = blackColor;
+        item1.buttonBackgroundColor             = grayColor;
+        item1.alternateButtonBackgroundColor    = greenColor; 
+        
 
         item1.toolTip = [objDict objectForKey:@"title"];
         item1.keyEquivalent = [NSString stringWithFormat:@"%ld",(unsigned long)idx];
