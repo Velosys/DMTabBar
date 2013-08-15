@@ -223,23 +223,23 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
             case NSOnState:
             {
                 // Icon, if any
-                self.originalIcon = [self icon];
-                [self setIcon:[self alternateIcon]];
-                [self setAlternateIcon:self.originalIcon];
-                
+//                self.originalIcon = [self icon];
+//                [self setIcon:[self alternateIcon]];
+//                [self setAlternateIcon:self.originalIcon];
+
                 [[tabBarItemButton cell] setBackgroundColor:self.alternateButtonBackgroundColor];
                 break;
             }
 
             case NSOffState:
             {
-                if (self.originalIcon)
-                {
-                    [self setAlternateIcon:[self icon]];
-                    [self setIcon:self.originalIcon];
-                    self.originalIcon = nil;
-                }
-                
+//                if (self.originalIcon)
+//                {
+//                    [self setAlternateIcon:[self icon]];
+//                    [self setIcon:self.originalIcon];
+//                    self.originalIcon = nil;
+//                }
+//                
                 [[tabBarItemButton cell] setBackgroundColor:self.buttonBackgroundColor];
                 break;
             }
