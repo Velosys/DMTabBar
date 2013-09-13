@@ -66,9 +66,7 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
 
         // set attributes on title
 
-        NSMutableAttributedString* attributedTitle = [[[tabBarItemButton cell] attributedTitle] mutableCopy];
-        [self setValue:self.buttonTextColor forAttribute:NSForegroundColorAttributeName forAttributedString:attributedTitle];
-        [[tabBarItemButton cell] setAttributedTitle:attributedTitle];
+        [self updateAttributedTitleWithColor:buttonTextColor];
     }
 
 }
@@ -79,10 +77,22 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
     {
         _alternateButtonTextColor = alternateButtonTextColor;
 
-        NSMutableAttributedString* attributedAlternateTitle = [[[tabBarItemButton cell] attributedAlternateTitle] mutableCopy];
-        [self setValue:self.alternateButtonTextColor forAttribute:NSForegroundColorAttributeName forAttributedString:attributedAlternateTitle];
-        [[tabBarItemButton cell] setAttributedAlternateTitle:attributedAlternateTitle];
+        [self updateAlternateAttributedTitleWithColor:alternateButtonTextColor];
     }
+}
+
+- (void)updateAttributedTitleWithColor:(NSColor*)color
+{
+	NSMutableAttributedString* attributedTitle = [[[tabBarItemButton cell] attributedTitle] mutableCopy];
+	[self setValue:color forAttribute:NSForegroundColorAttributeName forAttributedString:attributedTitle];
+	[[tabBarItemButton cell] setAttributedTitle:attributedTitle];
+}
+
+- (void)updateAlternateAttributedTitleWithColor:(NSColor*)color
+{
+	NSMutableAttributedString* attributedAlternateTitle = [[[tabBarItemButton cell] attributedAlternateTitle] mutableCopy];
+	[self setValue:color forAttribute:NSForegroundColorAttributeName forAttributedString:attributedAlternateTitle];
+	[[tabBarItemButton cell] setAttributedAlternateTitle:attributedAlternateTitle];
 }
 
 + (DMTabBarItem *) tabBarItemWithIcon:(NSImage *) iconImage tag:(NSUInteger) itemTag {
@@ -107,9 +117,10 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
         [tabBarItemButton sendActionOn:NSLeftMouseDownMask];
         [tabBarItemButton setBordered:NO];
         [tabBarItemButton setButtonType:NSToggleButton];
-
+		[tabBarItemButton.cell setHighlightsBy:0]; // disable flicker on click
 
         [self setItemType:DMTabBarItemIconOnly];
+		icon = iconImage;
     }
     return self;
 }
@@ -141,6 +152,7 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
         [tabBarItemButton setBordered:NO];
         [tabBarItemButton setAlignment:NSCenterTextAlignment];
         [tabBarItemButton setButtonType:NSToggleButton];
+		[tabBarItemButton.cell setHighlightsBy:0]; // disable flicker on click
 
         [self setItemType:DMTabBarItemTitleOnly];
     }
@@ -165,6 +177,7 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
 // We simply redirects properties to the the NSButton class
 
 - (void) setIcon:(NSImage *)newIcon { 
+	icon = newIcon;
     tabBarItemButton.image = newIcon;   
 }
 
@@ -173,12 +186,13 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
 }
 
 - (void) setAlternateIcon:(NSImage *)newAlternateIcon {
+    alternateIcon = newAlternateIcon;
     tabBarItemButton.alternateImage = newAlternateIcon;
 }
 
 - (NSImage *) alternateIcon
 {
-    return  tabBarItemButton.alternateImage;
+    return tabBarItemButton.alternateImage;
 }
 
 - (void) setTag:(NSUInteger)newTag {  
@@ -222,25 +236,33 @@ static CGFloat kDMTabBarItemGradientColor_Locations[] =     {0.0f, 0.5f, 1.0f};
         {
             case NSOnState:
             {
-                // Icon, if any
-//                self.originalIcon = [self icon];
-//                [self setIcon:[self alternateIcon]];
-//                [self setAlternateIcon:self.originalIcon];
-
                 [[tabBarItemButton cell] setBackgroundColor:self.alternateButtonBackgroundColor];
+				
+				// Disable flicker of button by setting text color or icon to match alternate ones
+				if (self.itemType == DMTabBarItemTitleOnly)
+				{
+					[self updateAttributedTitleWithColor:self.alternateButtonTextColor];
+				}
+				else
+				{
+					tabBarItemButton.image = alternateIcon;
+				}
                 break;
             }
 
             case NSOffState:
             {
-//                if (self.originalIcon)
-//                {
-//                    [self setAlternateIcon:[self icon]];
-//                    [self setIcon:self.originalIcon];
-//                    self.originalIcon = nil;
-//                }
-//                
                 [[tabBarItemButton cell] setBackgroundColor:self.buttonBackgroundColor];
+				
+				// Restore text color or icon to original ones
+				if (self.itemType == DMTabBarItemTitleOnly)
+				{
+					[self updateAttributedTitleWithColor:self.buttonTextColor];
+				}
+				else
+				{
+					tabBarItemButton.image = icon;
+				}
                 break;
             }
         }
